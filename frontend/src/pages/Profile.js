@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
 const Profile = () => {
@@ -8,9 +8,9 @@ const Profile = () => {
 
   useEffect(() => {
     fetchUserProfile();
-  }, [id]);
+  }, [id, fetchUserProfile]);
 
-  const fetchUserProfile = async () => {
+  const fetchUserProfile = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`http://localhost:3001/api/users/${id}`, {
@@ -28,7 +28,7 @@ const Profile = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   if (loading) {
     return <div className="loading">Loading profile...</div>;

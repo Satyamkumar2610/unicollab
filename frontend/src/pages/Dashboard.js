@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const [user, setUser] = useState({ name: 'Student' });
+  const [user] = useState({ name: 'Student' });
   const [stats, setStats] = useState({
     totalProjects: 0,
     activeProjects: 0,
