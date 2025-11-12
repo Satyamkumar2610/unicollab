@@ -27,10 +27,24 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await login(formData.email, formData.password);
-      navigate('/dashboard');
+      const response = await fetch('http://localhost:3001/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        navigate('/dashboard');
+      } else {
+        setError(data.message || 'Login failed');
+      }
     } catch (error) {
-      setError(error.response?.data?.message || 'Login failed');
+      setError('Login failed');
     } finally {
       setLoading(false);
     }

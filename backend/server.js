@@ -6,23 +6,19 @@ require('dotenv').config();
 const app = express();
 
 app.use(cors({
-  origin: ['http:
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
-app.options('*', cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb:
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/unicollab')
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.error('MongoDB Connection Error:', err));
 
-const authRoutes = require('./routes/auth.js');
+const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {

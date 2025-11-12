@@ -38,10 +38,24 @@ const Register = () => {
 
     try {
       const { confirmPassword, ...userData } = formData;
-      await register(userData);
-      navigate('/dashboard');
+      const response = await fetch('http://localhost:3001/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        navigate('/dashboard');
+      } else {
+        setError(data.message || 'Registration failed');
+      }
     } catch (error) {
-      setError(error.response?.data?.message || 'Registration failed');
+      setError('Registration failed');
     } finally {
       setLoading(false);
     }

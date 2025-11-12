@@ -19,12 +19,14 @@ const Navbar = () => {
           UniCollab
         </Link>
         
-        {user ? (
+        {localStorage.getItem('token') ? (
           <div className="nav-menu">
             <Link to="/dashboard" className="nav-link">Dashboard</Link>
-            <Link to="/projects" className="nav-link">Projects</Link>
-            <Link to="/profile" className="nav-link">Profile</Link>
-            <button onClick={handleLogout} className="nav-button logout">
+            <Link to="/browse" className="nav-link">Browse</Link>
+            <Link to="/my-projects" className="nav-link">My Projects</Link>
+            <Link to="/create-project" className="nav-link">Create</Link>
+            <Link to="/competitions" className="nav-link">Competitions</Link>
+            <button onClick={() => {localStorage.removeItem('token'); window.location.href='/';}} className="nav-button logout">
               Logout
             </button>
           </div>
