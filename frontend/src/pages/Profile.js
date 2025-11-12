@@ -6,10 +6,6 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchUserProfile();
-  }, [id, fetchUserProfile]);
-
   const fetchUserProfile = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
@@ -29,6 +25,10 @@ const Profile = () => {
       setLoading(false);
     }
   }, [id]);
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, [fetchUserProfile]);
 
   if (loading) {
     return <div className="loading">Loading profile...</div>;
