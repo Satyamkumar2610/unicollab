@@ -37,7 +37,7 @@ const Register = () => {
 
     try {
       const { confirmPassword, ...userData } = formData;
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/register`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://unicollab-backend.onrender.com/api'}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
