@@ -14,7 +14,7 @@ app.use(cors({
 
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/unicollab')
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.error('MongoDB Connection Error:', err));
 
@@ -25,10 +25,18 @@ app.get('/', (req, res) => {
   res.json({ message: 'UniCollab API is running' });
 });
 
+app.get('/api', (req, res) => {
+  res.json({ message: 'API endpoint working' });
+});
+
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Test endpoint working' });
+});
+
 app.use((err, req, res, next) => {
   console.error('Global Error:', err.stack);
   res.status(500).json({ error: 'Internal server error' });
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
