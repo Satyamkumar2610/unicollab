@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { Link } from 'react-router-dom';
 import './Auth.css';
 
 const Login = () => {
@@ -11,8 +10,8 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
-  const { login } = useAuth();
-  const navigate = useNavigate();
+
+
 
   const handleChange = (e) => {
     setFormData({
@@ -39,7 +38,7 @@ const Login = () => {
       
       if (response.ok) {
         localStorage.setItem('token', data.token);
-        navigate('/dashboard');
+        window.location.href = '/dashboard';
       } else {
         setError(data.message || 'Login failed');
       }

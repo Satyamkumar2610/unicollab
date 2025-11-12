@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import api from '../services/api';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const [user, setUser] = useState({ name: 'Student' });
   const [stats, setStats] = useState({
     totalProjects: 0,
     activeProjects: 0,
@@ -15,24 +13,29 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchDashboardData();
+    setStats({
+      totalProjects: 5,
+      activeProjects: 3,
+      collaborations: 2
+    });
+    setRecentProjects([
+      {
+        _id: '1',
+        title: 'E-Learning Platform',
+        description: 'Building a modern e-learning platform with React and Node.js',
+        status: 'active',
+        members: [{ name: 'John' }, { name: 'Jane' }]
+      },
+      {
+        _id: '2',
+        title: 'Mobile App Development',
+        description: 'Creating a mobile app for student collaboration',
+        status: 'planning',
+        members: [{ name: 'Alice' }]
+      }
+    ]);
+    setLoading(false);
   }, []);
-
-  const fetchDashboardData = async () => {
-    try {
-      const [statsRes, projectsRes] = await Promise.all([
-        api.get('/dashboard/stats'),
-        api.get('/projects?limit=5')
-      ]);
-      
-      setStats(statsRes.data);
-      setRecentProjects(projectsRes.data.projects || []);
-    } catch (error) {
-      console.error('Failed to fetch dashboard data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return <div className="loading">Loading dashboard...</div>;

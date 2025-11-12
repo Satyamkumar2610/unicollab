@@ -1,15 +1,13 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const isAuthenticated = localStorage.getItem('token') !== null;
 
   const handleLogout = () => {
-    logout();
-    navigate('/login');
+    localStorage.removeItem('token');
+    window.location.href = '/';
   };
 
   return (
@@ -19,14 +17,14 @@ const Navbar = () => {
           UniCollab
         </Link>
         
-        {localStorage.getItem('token') ? (
+        {isAuthenticated ? (
           <div className="nav-menu">
             <Link to="/dashboard" className="nav-link">Dashboard</Link>
             <Link to="/browse" className="nav-link">Browse</Link>
             <Link to="/my-projects" className="nav-link">My Projects</Link>
             <Link to="/create-project" className="nav-link">Create</Link>
             <Link to="/competitions" className="nav-link">Competitions</Link>
-            <button onClick={() => {localStorage.removeItem('token'); window.location.href='/';}} className="nav-button logout">
+            <button onClick={handleLogout} className="nav-button logout">
               Logout
             </button>
           </div>
