@@ -20,9 +20,14 @@ mongoose.connect(process.env.MONGODB_URI)
 
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
+console.log('Auth routes registered at /api/auth');
 
 app.get('/', (req, res) => {
-  res.json({ message: 'UniCollab API is running' });
+  res.json({ 
+    message: 'Unicollab API',
+    version: '1.0.0',
+    status: 'running'
+  });
 });
 
 app.get('/api', (req, res) => {
