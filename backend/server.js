@@ -44,4 +44,13 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  console.log('Available routes:');
+  console.log('GET /');
+  console.log('GET /api');
+  console.log('GET /api/test');
+  console.log('GET /api/auth/test');
+  console.log('POST /api/auth/register');
+  console.log('POST /api/auth/login');
+});

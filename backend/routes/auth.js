@@ -5,6 +5,10 @@ const auth = require('../middleware/auth');
 
 const router = express.Router();
 
+router.get('/test', (req, res) => {
+  res.json({ message: 'Auth routes working' });
+});
+
 router.post('/register', async (req, res) => {
   try {
     console.log('Registration request body:', req.body);
