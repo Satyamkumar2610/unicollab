@@ -13,48 +13,37 @@ const Register = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
-
-
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-
+    
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
     setLoading(true);
+    setError('');
 
     try {
       const { confirmPassword, ...userData } = formData;
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'https://unicollab-backend.onrender.com/api'}/auth/register`, {
+      const res = await fetch('http://localhost:3001/api/auth/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
       });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
+
+      const data = await res.json();
+
+      if (res.ok) {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data));
         window.location.href = '/dashboard';
       } else {
-        setError(data.message || 'Registration failed');
+        setError(data.message);
       }
-    } catch (error) {
-      setError('Registration failed');
+    } catch (err) {
+      setError('Connection error');
     } finally {
       setLoading(false);
     }
@@ -63,83 +52,69 @@ const Register = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Sign Up for UniCollab</h2>
+        <h2>Join UniCollab</h2>
         {error && <div className="error-message">{error}</div>}
-        
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Full Name</label>
+            <label>Name</label>
             <input
               type="text"
-              name="name"
               value={formData.name}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
             />
           </div>
-          
           <div className="form-group">
             <label>Email</label>
             <input
               type="email"
-              name="email"
               value={formData.email}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
             />
           </div>
-          
           <div className="form-group">
             <label>University</label>
             <input
               type="text"
-              name="university"
               value={formData.university}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, university: e.target.value })}
               required
             />
           </div>
-          
           <div className="form-group">
             <label>Major</label>
             <input
               type="text"
-              name="major"
               value={formData.major}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, major: e.target.value })}
               required
             />
           </div>
-          
           <div className="form-group">
             <label>Password</label>
             <input
               type="password"
-              name="password"
               value={formData.password}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
             />
           </div>
-          
           <div className="form-group">
             <label>Confirm Password</label>
             <input
               type="password"
-              name="confirmPassword"
               value={formData.confirmPassword}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
               required
             />
           </div>
-          
           <button type="submit" disabled={loading} className="auth-button">
             {loading ? 'Creating Account...' : 'Sign Up'}
           </button>
         </form>
-        
         <p className="auth-link">
-          Already have an account? <Link to="/login">Log in here</Link>
+          Have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </div>
