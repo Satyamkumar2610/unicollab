@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -33,7 +34,8 @@ function AppRoutes() {
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/browse" element={<ProtectedRoute><BrowseProjects /></ProtectedRoute>} />
       <Route path="/projects" element={<ProtectedRoute><BrowseProjects /></ProtectedRoute>} />
-      <Route path="/project/:id" element={<ProtectedRoute><ProjectDetail /></ProtectedRoute>} />
+      <Route path="/projects/:id" element={<ProtectedRoute><ProjectDetail /></ProtectedRoute>} />
+      <Route path="/projects/create" element={<ProtectedRoute><CreateProject /></ProtectedRoute>} />
       <Route path="/create-project" element={<ProtectedRoute><CreateProject /></ProtectedRoute>} />
       <Route path="/my-projects" element={<ProtectedRoute><MyProjects /></ProtectedRoute>} />
       <Route path="/competitions" element={<ProtectedRoute><Competitions /></ProtectedRoute>} />
@@ -46,11 +48,12 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
+        <div className="min-h-screen bg-black flex flex-col">
           <Navbar />
-          <main className="pt-16">
+          <main className="flex-1">
             <AppRoutes />
           </main>
+          <Footer />
         </div>
       </Router>
     </AuthProvider>

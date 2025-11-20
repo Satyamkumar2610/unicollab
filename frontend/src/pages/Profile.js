@@ -1,173 +1,65 @@
-import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import api from '../services/api';
 
 const Profile = () => {
-  const { user } = useAuth();
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
-    university: '',
-    major: '',
-    bio: '',
-    skills: ''
-  });
+  const { id } = useParams();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  useEffect(() => {
+    fetchProfile();
+  }, [id]);
+
+  const fetchProfile = async () => {
+    try {
+      const response = await api.get(`/users/${id}`);
+      setUser(response.data);
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // TODO: Implement profile update
-    setIsEditing(false);
-  };
+  if (loading) return <div className="pt-20 text-center text-white text-xl">Loading...</div>;
+  if (!user) return <div className="pt-20 text-center text-white text-xl">User not found</div>;
 
   return (
-    <div className="min-h-screen px-4 py-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
-          <div className="text-center mb-8">
-            <div className="w-24 h-24 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4">
-              {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+    <div className="pt-20 min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-6">
+      <div className="max-width-2xl mx-auto">
+        <div className="card p-8 animate-slide-up">
+          <h1 className="text-4xl font-bold gradient-text mb-2">{user.name}</h1>
+          <p className="text-gray-600 mb-8">{user.email}</p>
+
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-bold text-gray-800">University</h3>
+              <p className="text-gray-600">{user.university}</p>
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">Profile</h1>
-            <p className="text-white/80">Manage your account information</p>
+            <div>
+              <h3 className="font-bold text-gray-800">Major</h3>
+              <p className="text-gray-600">{user.major}</p>
+            </div>
+            {user.bio && (
+              <div>
+                <h3 className="font-bold text-gray-800">Bio</h3>
+                <p className="text-gray-600">{user.bio}</p>
+              </div>
+            )}
+            {user.skills?.length > 0 && (
+              <div>
+                <h3 className="font-bold text-gray-800 mb-2">Skills</h3>
+                <div className="flex flex-wrap gap-2">
+                  {user.skills.map((skill, i) => (
+                    <span key={i} className="px-3 py-1 bg-indigo-100 text-indigo-600 rounded-lg text-sm font-semibold">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-
-          {!isEditing ? (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-white/70 text-sm mb-1">Name</label>
-                  <p className="text-white text-lg">{user?.name || 'Not set'}</p>
-                </div>
-                <div>
-                  <label className="block text-white/70 text-sm mb-1">Email</label>
-                  <p className="text-white text-lg">{user?.email || 'Not set'}</p>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-white/70 text-sm mb-1">University</label>
-                  <p className="text-white text-lg">{formData.university || 'Not set'}</p>
-                </div>
-                <div>
-                  <label className="block text-white/70 text-sm mb-1">Major</label>
-                  <p className="text-white text-lg">{formData.major || 'Not set'}</p>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-white/70 text-sm mb-1">Bio</label>
-                <p className="text-white text-lg">{formData.bio || 'No bio added yet'}</p>
-              </div>
-
-              <div>
-                <label className="block text-white/70 text-sm mb-1">Skills</label>
-                <p className="text-white text-lg">{formData.skills || 'No skills added yet'}</p>
-              </div>
-
-              <button
-                onClick={() => setIsEditing(true)}
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
-              >
-                Edit Profile
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-white font-medium mb-2">Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-white font-medium mb-2">Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-white font-medium mb-2">University</label>
-                  <input
-                    type="text"
-                    name="university"
-                    value={formData.university}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-white font-medium mb-2">Major</label>
-                  <input
-                    type="text"
-                    name="major"
-                    value={formData.major}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-white font-medium mb-2">Bio</label>
-                <textarea
-                  name="bio"
-                  value={formData.bio}
-                  onChange={handleChange}
-                  rows="3"
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm resize-none"
-                  placeholder="Tell us about yourself..."
-                />
-              </div>
-
-              <div>
-                <label className="block text-white font-medium mb-2">Skills</label>
-                <input
-                  type="text"
-                  name="skills"
-                  value={formData.skills}
-                  onChange={handleChange}
-                  placeholder="e.g., React, Python, Design (comma separated)"
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent backdrop-blur-sm"
-                />
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className="flex-1 bg-white/20 hover:bg-white/30 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 backdrop-blur-sm border border-white/30"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
-                >
-                  Save Changes
-                </button>
-              </div>
-            </form>
-          )}
         </div>
       </div>
     </div>
