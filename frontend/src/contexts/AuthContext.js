@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (token) {
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setIsAuthenticated(true);
@@ -26,10 +26,12 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
+    console.log('🔵 Login attempt:', email);
     const response = await api.post('/auth/login', { email, password });
     const { token, user } = response.data;
     
-    sessionStorage.setItem('token', token);
+    console.log('✅ Login successful:', user);
+    localStorage.setItem('token', token);
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     setUser(user);
     setIsAuthenticated(true);
@@ -38,10 +40,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (userData) => {
+    console.log('🔵 Register attempt:', userData.email);
     const response = await api.post('/auth/register', userData);
     const { token, user } = response.data;
     
-    sessionStorage.setItem('token', token);
+    console.log('✅ Registration successful:', user);
+    localStorage.setItem('token', token);
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     setUser(user);
     setIsAuthenticated(true);
@@ -50,7 +54,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    sessionStorage.removeItem('token');
+    console.log('🔵 Logout');
+    localStorage.removeItem('token');
     delete api.defaults.headers.common['Authorization'];
     setUser(null);
     setIsAuthenticated(false);
