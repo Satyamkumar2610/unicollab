@@ -11,7 +11,7 @@ router.post('/register', async (req, res) => {
     if (exists) return res.status(400).json({ message: 'User already exists' });
 
     const user = await User.create({ name, email, password, university, major });
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'fallback_secret', { expiresIn: '30d' });
 
     res.status(201).json({
       token,
@@ -38,7 +38,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'fallback_secret', { expiresIn: '30d' });
     res.json({ 
       token, 
       user: { 
@@ -62,7 +62,7 @@ router.get('/me', async (req, res) => {
       return res.status(401).json({ message: 'No token provided' });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
     const user = await User.findById(decoded.userId).select('-password');
     
     if (!user) {
