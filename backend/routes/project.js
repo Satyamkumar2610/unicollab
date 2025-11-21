@@ -1,15 +1,20 @@
 const express = require('express');
 const Project = require('../models/project');
 const auth = require('../middleware/auth');
+const { buildListResponse } = require('../utils/listResponse');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const { status, search, page = 1, limit = 10 } = req.query;
+    const { status, search, page = 1, limit = 10, sortBy = 'createdAt', order = 'desc', category } = req.query;
     let query = {};
 
     if (status && status !== 'all') {
       query.status = status;
+    }
+
+    if (category) {
+      query.category = category;
     }
 
     if (search) {
@@ -19,17 +24,16 @@ router.get('/', async (req, res) => {
       ];
     }
 
+    const sort = { [sortBy]: order === 'desc' ? -1 : 1 };
     const projects = await Project.find(query)
-      .populate('owner', 'name email')
-      .populate('members', 'name email')
-      .sort({ createdAt: -1 })
+      .populate('owner', 'name email avatar')
+      .populate('members', 'name email avatar')
+      .sort(sort)
       .skip((page - 1) * limit)
       .limit(parseInt(limit));
 
     const total = await Project.countDocuments(query);
-    const totalPages = Math.ceil(total / limit);
-
-    res.json({ projects, total, page: parseInt(page), limit: parseInt(limit), totalPages });
+    res.json(buildListResponse(projects, total, page, limit));
   } catch (error) {
     console.error('Get projects error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -49,8 +53,8 @@ router.post('/', auth, async (req, res) => {
     
     const project = await Project.create(projectData);
     const populatedProject = await Project.findById(project._id)
-      .populate('owner', 'name email')
-      .populate('members', 'name email');
+      .populate('owner', 'name email avatar')
+      .populate('members', 'name email avatar');
     
     console.log('Project created:', populatedProject);
     res.status(201).json(populatedProject);
@@ -63,8 +67,8 @@ router.post('/', auth, async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const project = await Project.findById(req.params.id)
-      .populate('owner', 'name email')
-      .populate('members', 'name email');
+      .populate('owner', 'name email avatar')
+      .populate('members', 'name email avatar');
     
     if (!project) {
       return res.status(404).json({ message: 'Project not found' });
@@ -93,7 +97,7 @@ router.put('/:id', auth, async (req, res) => {
       req.params.id,
       req.body,
       { new: true }
-    ).populate('owner members', 'name email');
+    ).populate('owner members', 'name email avatar');
     
     res.json(updatedProject);
   } catch (error) {
@@ -122,7 +126,7 @@ router.post('/:id/join', auth, async (req, res) => {
     await project.save();
     
     const updatedProject = await Project.findById(project._id)
-      .populate('owner members', 'name email');
+      .populate('owner members', 'name email avatar');
     
     res.json(updatedProject);
   } catch (error) {
@@ -151,7 +155,7 @@ router.post('/:id/leave', auth, async (req, res) => {
     await project.save();
     
     const updatedProject = await Project.findById(project._id)
-      .populate('owner members', 'name email');
+      .populate('owner members', 'name email avatar');
     
     res.json(updatedProject);
   } catch (error) {

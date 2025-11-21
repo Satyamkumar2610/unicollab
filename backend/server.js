@@ -29,6 +29,9 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/projects', require('./routes/project'));
 app.use('/api/users', require('./routes/user'));
+app.use('/api/notifications', require('./routes/notification'));
+app.use('/api/collaboration-requests', require('./routes/collaborationRequest'));
+app.use('/api/teams', require('./routes/team'));
 
 app.get('/', (req, res) => res.json({ message: 'UniCollab API Running' }));
 

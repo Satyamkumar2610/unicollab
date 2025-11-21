@@ -13,6 +13,9 @@ import CreateProject from './pages/CreateProject';
 import MyProjects from './pages/MyProjects';
 import Competitions from './pages/Competitions';
 import Profile from './pages/Profile';
+import { Notifications } from './pages/Notifications';
+import { Explore } from './pages/Explore';
+import { Teams } from './pages/Teams';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
@@ -40,6 +43,9 @@ function AppRoutes() {
       <Route path="/my-projects" element={<ProtectedRoute><MyProjects /></ProtectedRoute>} />
       <Route path="/competitions" element={<ProtectedRoute><Competitions /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+      <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
+      <Route path="/teams" element={<ProtectedRoute><Teams /></ProtectedRoute>} />
     </Routes>
   );
 }
