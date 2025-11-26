@@ -1,19 +1,17 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
 import { api } from '../services/api';
 import { useList } from '../hooks/useList';
 import { usePagination } from '../hooks/usePagination';
-import { LoadingState, SkeletonLoader } from '../components/LoadingState';
-import { ErrorState } from '../components/ErrorState';
-import { EmptyState } from '../components/EmptyState';
-import { Pagination } from '../components/Pagination';
-import { ListFilters } from '../components/ListFilters';
+import { SkeletonLoader } from '../components/ui/LoadingState';
+import { ErrorState } from '../components/ui/ErrorState';
+import { EmptyState } from '../components/ui/EmptyState';
+import { Pagination } from '../components/ui/Pagination';
+import { ListFilters } from '../components/shared/ListFilters';
 import { buildListUrl } from '../utils/queryBuilder';
 
 export const Explore = () => {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
   const { page, limit, goToPage, resetPage } = usePagination();
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState('createdAt');
@@ -77,7 +75,7 @@ export const Explore = () => {
               >
                 <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
                 <p className="text-gray-400 text-sm mb-4 line-clamp-2">{project.description}</p>
-                
+
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-xs bg-purple-600/30 text-purple-300 px-2 py-1 rounded">
                     {project.status}

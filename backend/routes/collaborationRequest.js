@@ -45,8 +45,9 @@ router.post('/', auth, async (req, res) => {
       relatedRequest: request._id
     });
 
-    const populated = await request.populate('requester', 'name avatar').populate('project', 'title');
-    res.status(201).json(populated);
+    await request.populate('requester', 'name avatar');
+    await request.populate('project', 'title');
+    res.status(201).json(request);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
@@ -55,7 +56,8 @@ router.post('/', auth, async (req, res) => {
 router.get('/', auth, async (req, res) => {
   try {
     const { page = 1, limit = 10, status } = req.query;
-    let query = { project: { $in: await Project.find({ owner: req.user.userId }).select('_id') } };
+    const userProjects = await Project.find({ owner: req.user.userId }).select('_id');
+    let query = { project: { $in: userProjects.map(p => p._id) } };
 
     if (status) {
       query.status = status;
@@ -102,8 +104,9 @@ router.put('/:id/accept', auth, async (req, res) => {
       relatedProject: project._id
     });
 
-    const populated = await request.populate('requester', 'name avatar').populate('project', 'title');
-    res.json(populated);
+    await request.populate('requester', 'name avatar');
+    await request.populate('project', 'title');
+    res.json(request);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
@@ -124,8 +127,9 @@ router.put('/:id/reject', auth, async (req, res) => {
     request.respondedBy = req.user.userId;
     await request.save();
 
-    const populated = await request.populate('requester', 'name avatar').populate('project', 'title');
-    res.json(populated);
+    await request.populate('requester', 'name avatar');
+    await request.populate('project', 'title');
+    res.json(request);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }

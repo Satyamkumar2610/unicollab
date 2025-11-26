@@ -1,16 +1,14 @@
-import { useState, useContext } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
+import { useState } from 'react';
 import { api } from '../services/api';
 import { useList } from '../hooks/useList';
 import { usePagination } from '../hooks/usePagination';
-import { LoadingState, SkeletonLoader } from '../components/LoadingState';
-import { ErrorState } from '../components/ErrorState';
-import { EmptyState } from '../components/EmptyState';
-import { Pagination } from '../components/Pagination';
+import { SkeletonLoader } from '../components/ui/LoadingState';
+import { ErrorState } from '../components/ui/ErrorState';
+import { EmptyState } from '../components/ui/EmptyState';
+import { Pagination } from '../components/ui/Pagination';
 import { buildListUrl } from '../utils/queryBuilder';
 
 export const Notifications = () => {
-  const { user } = useContext(AuthContext);
   const { page, limit, goToPage, resetPage } = usePagination();
   const [filter, setFilter] = useState('all');
 
@@ -60,11 +58,10 @@ export const Notifications = () => {
             <button
               key={f}
               onClick={() => { setFilter(f); resetPage(); }}
-              className={`px-4 py-2 rounded-lg transition ${
-                filter === f
+              className={`px-4 py-2 rounded-lg transition ${filter === f
                   ? 'bg-purple-600 text-white'
                   : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
-              }`}
+                }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
@@ -78,9 +75,8 @@ export const Notifications = () => {
             {data.map(notif => (
               <div
                 key={notif._id}
-                className={`bg-gray-800/50 backdrop-blur-md rounded-lg p-4 border ${
-                  notif.read ? 'border-gray-700' : 'border-purple-500'
-                }`}
+                className={`bg-gray-800/50 backdrop-blur-md rounded-lg p-4 border ${notif.read ? 'border-gray-700' : 'border-purple-500'
+                  }`}
               >
                 <div className="flex justify-between items-start">
                   <div className="flex-1">

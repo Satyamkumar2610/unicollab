@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../services/api';
+import { api } from '../services/api';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -17,9 +17,8 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token) {
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setIsAuthenticated(true);
     }
     setLoading(false);
@@ -28,35 +27,32 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     console.log('🔵 Login attempt:', email);
     const response = await api.post('/auth/login', { email, password });
-    const { token, user } = response.data;
+    const { token, user } = response;
     
     console.log('✅ Login successful:', user);
-    localStorage.setItem('token', token);
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    sessionStorage.setItem('token', token);
     setUser(user);
     setIsAuthenticated(true);
     
-    return response.data;
+    return response;
   };
 
   const register = async (userData) => {
     console.log('🔵 Register attempt:', userData.email);
     const response = await api.post('/auth/register', userData);
-    const { token, user } = response.data;
+    const { token, user } = response;
     
     console.log('✅ Registration successful:', user);
-    localStorage.setItem('token', token);
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    sessionStorage.setItem('token', token);
     setUser(user);
     setIsAuthenticated(true);
     
-    return response.data;
+    return response;
   };
 
   const logout = () => {
     console.log('🔵 Logout');
-    localStorage.removeItem('token');
-    delete api.defaults.headers.common['Authorization'];
+    sessionStorage.removeItem('token');
     setUser(null);
     setIsAuthenticated(false);
   };

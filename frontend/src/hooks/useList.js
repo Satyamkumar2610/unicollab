@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 export const useList = (fetchFn, dependencies = []) => {
   const [data, setData] = useState([]);
@@ -6,7 +6,25 @@ export const useList = (fetchFn, dependencies = []) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetch = useCallback(async () => {
+  useEffect(() => {
+    const fetch = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetchFn();
+        setData(response.data);
+        setMetadata(response.metadata);
+      } catch (err) {
+        setError(err.message || 'Failed to fetch data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetch();
+  }, dependencies);
+
+  const refetch = async () => {
     setLoading(true);
     setError(null);
     try {
@@ -18,11 +36,7 @@ export const useList = (fetchFn, dependencies = []) => {
     } finally {
       setLoading(false);
     }
-  }, [fetchFn]);
+  };
 
-  useEffect(() => {
-    fetch();
-  }, dependencies);
-
-  return { data, metadata, loading, error, refetch: fetch };
+  return { data, metadata, loading, error, refetch };
 };

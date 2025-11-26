@@ -6,14 +6,24 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const { status, search, page = 1, limit = 10, sortBy = 'createdAt', order = 'desc', category } = req.query;
+    const { 
+      status, 
+      search, 
+      page = 1, 
+      limit = 10, 
+      sortBy = 'createdAt', 
+      order = 'desc', 
+      category,
+      skills 
+    } = req.query;
+    
     let query = {};
 
     if (status && status !== 'all') {
       query.status = status;
     }
 
-    if (category) {
+    if (category && category !== 'all') {
       query.category = category;
     }
 
@@ -24,7 +34,13 @@ router.get('/', async (req, res) => {
       ];
     }
 
+    if (skills) {
+      const skillsArray = skills.split(',').map(skill => skill.trim());
+      query.requiredSkills = { $in: skillsArray };
+    }
+
     const sort = { [sortBy]: order === 'desc' ? -1 : 1 };
+    
     const projects = await Project.find(query)
       .populate('owner', 'name email avatar')
       .populate('members', 'name email avatar')
@@ -33,6 +49,7 @@ router.get('/', async (req, res) => {
       .limit(parseInt(limit));
 
     const total = await Project.countDocuments(query);
+    
     res.json(buildListResponse(projects, total, page, limit));
   } catch (error) {
     console.error('Get projects error:', error);
