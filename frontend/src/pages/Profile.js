@@ -95,7 +95,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-background pt-24 pb-12 relative overflow-hidden">
-      {}
+      { }
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-primary/5 to-transparent"></div>
@@ -105,7 +105,7 @@ const Profile = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-5xl mx-auto">
-          {}
+          { }
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -115,7 +115,7 @@ const Profile = () => {
               <div className="h-48 bg-gradient-to-r from-primary/30 via-violet-600/30 to-indigo-600/30 relative">
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
               </div>
-              <div className="px-8 pb-8">
+              <div className="px-4 pb-6 md:px-8 md:pb-8">
                 <div className="relative flex flex-col md:flex-row justify-between items-end -mt-16 mb-6 gap-4">
                   <div className="relative group">
                     <div className="w-32 h-32 rounded-2xl border-4 border-background bg-background overflow-hidden shadow-2xl group-hover:scale-105 transition-transform duration-300">
@@ -276,7 +276,7 @@ const Profile = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {}
+            { }
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -298,7 +298,7 @@ const Profile = () => {
               </Card>
             </motion.div>
 
-            {}
+            { }
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -343,7 +343,7 @@ const Profile = () => {
                       <span className="text-muted-foreground">Joined</span>
                       <span className="font-medium">{new Date(user.createdAt || Date.now()).toLocaleDateString()}</span>
                     </div>
-                    {}
+                    { }
                   </div>
                 </CardContent>
               </Card>
@@ -352,7 +352,7 @@ const Profile = () => {
         </div>
       </div>
 
-      {}
+      { }
       <AnimatePresence>
         {showDeleteConfirm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">

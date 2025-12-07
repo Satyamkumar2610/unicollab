@@ -46,7 +46,7 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 pt-20 pb-20 relative overflow-hidden">
-      {}
+      { }
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl -z-10 animate-pulse-slow" />
       <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl -z-10 animate-pulse-slow delay-1000" />
 
@@ -90,7 +90,7 @@ const Register = () => {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-foreground font-medium mb-2">University</label>
               <input

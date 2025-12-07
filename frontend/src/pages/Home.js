@@ -31,7 +31,7 @@ const FeatureCard = ({ icon: Icon, title, description, delay }) => (
 const Home = () => {
   return (
     <div className="min-h-screen bg-background overflow-hidden relative">
-      {}
+      { }
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-primary/5 to-transparent"></div>
@@ -39,7 +39,7 @@ const Home = () => {
         <div className="absolute bottom-0 right-0 w-[800px] h-[600px] bg-violet-600/20 rounded-full blur-[100px] opacity-30 animate-pulse-slow delay-1000" />
       </div>
 
-      {}
+      { }
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 z-10">
         <div className="container mx-auto px-4 text-center">
           <motion.div
@@ -57,7 +57,7 @@ const Home = () => {
               The Future of Student Collaboration
             </motion.div>
 
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 relative">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 sm:mb-8 relative">
               <span className="relative z-10">Build Together,</span> <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-violet-500 to-indigo-500 drop-shadow-[0_0_30px_rgba(124,58,237,0.3)]">
                 Grow Faster.
@@ -92,7 +92,7 @@ const Home = () => {
         </div>
       </section>
 
-      {}
+      { }
       <section className="py-24 relative z-10">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -102,7 +102,7 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             <FeatureCard
               icon={Rocket}
               title="Launch Projects"
@@ -125,10 +125,10 @@ const Home = () => {
         </div>
       </section>
 
-      {}
+      { }
       <section className="py-24 border-t border-white/5 relative z-10 bg-black/20 backdrop-blur-sm">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -157,7 +157,7 @@ const Home = () => {
                   </motion.div>
                 ))}
               </div>
-              <Button className="mt-10 h-12 px-8 rounded-full" variant="secondary" asChild>
+              <Button className="mt-8 md:mt-10 h-12 px-8 rounded-full w-full sm:w-auto" variant="secondary" asChild>
                 <Link to="/resources">View Resources</Link>
               </Button>
             </motion.div>

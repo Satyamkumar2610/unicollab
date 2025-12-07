@@ -40,7 +40,7 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-xl border-b border-white/10 supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {}
+          { }
           <Link to="/" className="flex items-center gap-2 group">
             <img
               src={logo}
@@ -52,7 +52,7 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {}
+          { }
           <div className="hidden md:flex items-center gap-1">
             {isAuthenticated ? (
               <>
@@ -70,7 +70,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {}
+          { }
           <div className="hidden md:flex items-center gap-4">
 
             {isAuthenticated ? (
@@ -106,7 +106,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {}
+          { }
           <div className="md:hidden flex items-center gap-2">
             <Button
               variant="ghost"
@@ -119,16 +119,16 @@ const Navbar = () => {
         </div>
       </div>
 
-      {}
+      { }
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-border bg-background"
+            className="md:hidden border-t border-white/10 bg-background/95 backdrop-blur-xl absolute top-16 left-0 right-0 shadow-2xl z-40"
           >
-            <div className="p-4 space-y-2">
+            <div className="p-4 space-y-3">
               {isAuthenticated ? (
                 <>
                   <NavItem to="/dashboard" icon={LayoutDashboard} onClick={() => setIsMenuOpen(false)}>Dashboard</NavItem>
@@ -137,7 +137,7 @@ const Navbar = () => {
                   <NavItem to="/showcase" icon={Layers} onClick={() => setIsMenuOpen(false)}>Showcase</NavItem>
                   <NavItem to="/resources" icon={BookOpen} onClick={() => setIsMenuOpen(false)}>Resources</NavItem>
                   <NavItem to="/profile" icon={User} onClick={() => setIsMenuOpen(false)}>Profile</NavItem>
-                  <div className="pt-2 border-t border-border">
+                  <div className="pt-3 mt-2 border-t border-white/10">
                     <Button variant="destructive" className="w-full justify-start" onClick={handleLogout}>
                       <LogOut className="w-4 h-4 mr-2" />
                       Logout
@@ -148,11 +148,11 @@ const Navbar = () => {
                 <>
                   <NavItem to="/showcase" icon={Layers} onClick={() => setIsMenuOpen(false)}>Showcase</NavItem>
                   <NavItem to="/resources" icon={BookOpen} onClick={() => setIsMenuOpen(false)}>Resources</NavItem>
-                  <div className="pt-2 border-t border-border grid gap-2">
-                    <Button variant="ghost" className="w-full" asChild onClick={() => setIsMenuOpen(false)}>
+                  <div className="pt-3 mt-2 border-t border-white/10 grid gap-3">
+                    <Button variant="ghost" className="w-full justify-center" asChild onClick={() => setIsMenuOpen(false)}>
                       <Link to="/login">Login</Link>
                     </Button>
-                    <Button className="w-full" variant="glow" asChild onClick={() => setIsMenuOpen(false)}>
+                    <Button className="w-full justify-center" variant="glow" asChild onClick={() => setIsMenuOpen(false)}>
                       <Link to="/register">Get Started</Link>
                     </Button>
                   </div>

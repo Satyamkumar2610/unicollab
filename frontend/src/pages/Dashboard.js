@@ -57,11 +57,11 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     try {
-      
+
       const statsRes = await api.get('/users/stats');
       setStats(statsRes);
 
-      
+
       const projectsRes = await api.get(`/projects?member=${user._id}&limit=3`);
       setProjects(projectsRes.data || []);
     } catch (error) {
@@ -75,7 +75,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background pt-24 pb-12 relative overflow-hidden">
-      {}
+      { }
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-primary/5 to-transparent"></div>
@@ -84,7 +84,7 @@ const Dashboard = () => {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {}
+        { }
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -95,7 +95,7 @@ const Dashboard = () => {
             <Sparkles className="w-3 h-3 mr-2" />
             Welcome Back
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-primary to-violet-400 mb-4 tracking-tight drop-shadow-sm">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-primary to-violet-400 mb-4 tracking-tight drop-shadow-sm">
             Hello, {user?.name?.split(' ')[0] || 'Creator'}!
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl leading-relaxed">
@@ -103,7 +103,7 @@ const Dashboard = () => {
           </p>
         </motion.div>
 
-        {}
+        { }
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -153,7 +153,7 @@ const Dashboard = () => {
           </motion.div>
         </motion.div>
 
-        {}
+        { }
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -206,7 +206,7 @@ const Dashboard = () => {
           </motion.div>
         </motion.div>
 
-        {}
+        { }
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -214,12 +214,12 @@ const Dashboard = () => {
           className="space-y-6"
         >
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
               <Clock className="w-6 h-6 text-primary" />
               Recent Projects
             </h2>
             <Link to="/projects">
-              <Button variant="ghost" className="text-primary hover:text-primary/80 hover:bg-primary/10">
+              <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80 hover:bg-primary/10">
                 View All <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
@@ -253,7 +253,7 @@ const Dashboard = () => {
                     <CardContent>
                       <div className="flex items-center justify-between text-xs text-muted-foreground mt-2 pt-4 border-t border-white/5">
                         <div className="flex -space-x-2">
-                          {}
+                          { }
                           <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary/20 to-blue-500/20 border border-background flex items-center justify-center text-[8px] font-bold text-primary">
                             {project.owner?.name?.charAt(0) || '?'}
                           </div>

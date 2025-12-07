@@ -115,7 +115,7 @@ const BrowseProjects = () => {
             <Sparkles className="w-3 h-3 mr-2" />
             Explore Innovation
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-primary to-violet-400 tracking-tight drop-shadow-sm">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-primary to-violet-400 tracking-tight drop-shadow-sm">
             Discover Projects
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
@@ -194,7 +194,7 @@ const BrowseProjects = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
           >
             {projects.map(project => (
               <ProjectCard key={project._id} project={project} />

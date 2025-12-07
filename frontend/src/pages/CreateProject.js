@@ -47,7 +47,7 @@ const CreateProject = () => {
 
   return (
     <div className="min-h-screen bg-background pt-24 pb-12 relative overflow-hidden">
-      {}
+      { }
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-primary/5 to-transparent"></div>
@@ -215,19 +215,19 @@ const CreateProject = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-4 pt-4">
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => navigate('/projects')}
-                    className="flex-1 h-11 border-white/10 hover:bg-white/5 hover:text-foreground"
+                    className="flex-1 h-11 border-white/10 hover:bg-white/5 hover:text-foreground order-2 sm:order-1"
                   >
                     Cancel
                   </Button>
                   <Button
                     type="submit"
                     disabled={loading}
-                    className="flex-1 h-11 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20"
+                    className="flex-1 h-11 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 order-1 sm:order-2"
                   >
                     {loading ? (
                       <span className="flex items-center gap-2">
