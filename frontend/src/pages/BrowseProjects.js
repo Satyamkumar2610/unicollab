@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { api } from '../services/api';
-import { LoadingState, EmptyState, ErrorState } from '../components';
+import { LoadingState, EmptyState, ErrorState, Pagination } from '../components';
 import { useDebounce } from '../hooks/useDebounce';
 import { cn } from '../utils/cn';
 import {
@@ -45,6 +45,8 @@ const BrowseProjects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [metadata, setMetadata] = useState(null);
 
   const [filters, setFilters] = useState({
     search: '',
@@ -58,19 +60,29 @@ const BrowseProjects = () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
+      params.append('page', page);
+      params.append('limit', 9); // Show 9 projects per page
       if (debouncedSearch) params.append('search', debouncedSearch);
       if (filters.category !== 'all') params.append('category', filters.category);
       if (filters.skills) params.append('skills', filters.skills);
 
       const response = await api.get(`/projects?${params.toString()}`);
-      setProjects(response.data || []);
+
+      // Handle both paginated and non-paginated responses for backward compatibility
+      if (response.data && response.metadata) {
+        setProjects(response.data);
+        setMetadata(response.metadata);
+      } else {
+        setProjects(Array.isArray(response) ? response : []);
+        setMetadata(null);
+      }
     } catch (err) {
       setError('Failed to fetch projects. Please try again later.');
       console.error('Error fetching projects:', err);
     } finally {
       setLoading(false);
     }
-  }, [debouncedSearch, filters.category, filters.skills]);
+  }, [debouncedSearch, filters.category, filters.skills, page]);
 
   useEffect(() => {
     fetchProjects();
@@ -79,11 +91,12 @@ const BrowseProjects = () => {
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
+    setPage(1); // Reset to first page on filter change
   };
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden pt-24 pb-12">
-      {}
+      { }
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-primary/5 to-transparent"></div>
@@ -110,7 +123,7 @@ const BrowseProjects = () => {
           </p>
         </motion.div>
 
-        {}
+        { }
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -171,7 +184,7 @@ const BrowseProjects = () => {
           </div>
         </motion.div>
 
-        {}
+        { }
         {loading ? (
           <LoadingState message="Fetching latest projects..." />
         ) : error ? (
@@ -191,6 +204,13 @@ const BrowseProjects = () => {
           <EmptyState
             title="No Projects Found"
             message="No projects match your current filters. Try a different search!"
+          />
+        )}
+
+        {!loading && !error && projects.length > 0 && metadata && (
+          <Pagination
+            metadata={metadata}
+            onPageChange={setPage}
           />
         )}
       </div>
