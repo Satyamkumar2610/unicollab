@@ -19,7 +19,6 @@ import { Explore } from './pages/Explore';
 import { Teams } from './pages/Teams';
 import Showcase from './pages/Showcase';
 import Resources from './pages/Resources';
-import IntroToUniCollab from './pages/IntroToUniCollab';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
@@ -54,7 +53,6 @@ function AppRoutes() {
       <Route path="/teams" element={<ProtectedRoute><Teams /></ProtectedRoute>} />
       <Route path="/showcase" element={<Showcase />} />
       <Route path="/resources" element={<Resources />} />
-      <Route path="/resources/intro" element={<IntroToUniCollab />} />
     </Routes>
   );
 }
