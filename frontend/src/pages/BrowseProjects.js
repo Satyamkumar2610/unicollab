@@ -1,34 +1,51 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { api } from '../services/api';
 import { LoadingState, EmptyState, ErrorState } from '../components';
 import { useDebounce } from '../hooks/useDebounce';
+import { cn } from '../utils/cn';
+import {
+  Search,
+  Filter,
+  Code,
+  Smartphone,
+  Cpu,
+  Beaker,
+  Users,
+  ArrowRight,
+  Sparkles,
+  Globe
+} from 'lucide-react';
 
-const SearchIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8"></circle>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-  </svg>
-);
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
 
-const ChevronDownIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="6 9 12 15 18 9"></polyline>
-  </svg>
-);
-
-const WrenchIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-  </svg>
-);
-
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 20
+    }
+  }
+};
 
 const BrowseProjects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   const [filters, setFilters] = useState({
     search: '',
     category: 'all',
@@ -46,7 +63,7 @@ const BrowseProjects = () => {
       if (filters.skills) params.append('skills', filters.skills);
 
       const response = await api.get(`/projects?${params.toString()}`);
-      setProjects(response.data.data || []);
+      setProjects(response.data || []);
     } catch (err) {
       setError('Failed to fetch projects. Please try again later.');
       console.error('Error fetching projects:', err);
@@ -65,73 +82,111 @@ const BrowseProjects = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white pt-24 pb-12">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <header className="mb-12 text-center">
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">Discover Projects</h1>
-          <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Find innovative projects and collaborate with talented students and professionals.
-          </p>
-        </header>
+    <div className="min-h-screen bg-background relative overflow-hidden pt-24 pb-12">
+      {}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-primary/5 to-transparent"></div>
+        <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] opacity-20 animate-pulse-slow" />
+        <div className="absolute bottom-[20%] right-[-5%] w-[500px] h-[500px] bg-violet-600/20 rounded-full blur-[100px] opacity-20 animate-pulse-slow delay-1000" />
+      </div>
 
-        <div className="mb-8 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="relative">
-              <input
-                type="text"
-                name="search"
-                placeholder="Search by title or keyword..."
-                value={filters.search}
-                onChange={handleFilterChange}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                <SearchIcon />
-              </span>
-            </div>
-            <div className="relative">
-              <select
-                name="category"
-                value={filters.category}
-                onChange={handleFilterChange}
-                className="w-full appearance-none pl-4 pr-10 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="all">All Categories</option>
-                <option value="web-development">Web Development</option>
-                <option value="mobile-app">Mobile App</option>
-                <option value="ai-ml">AI/ML</option>
-                <option value="research">Research</option>
-              </select>
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                <ChevronDownIcon />
-              </span>
-            </div>
-            <div className="relative">
-              <input
-                type="text"
-                name="skills"
-                placeholder="Filter by skills (e.g. React,Node.js)"
-                value={filters.skills}
-                onChange={handleFilterChange}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                <WrenchIcon />
-              </span>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16 relative"
+        >
+          <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium mb-4 backdrop-blur-sm">
+            <Sparkles className="w-3 h-3 mr-2" />
+            Explore Innovation
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-primary to-violet-400 tracking-tight drop-shadow-sm">
+            Discover Projects
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Find innovative projects and collaborate with talented students and professionals from around the world.
+          </p>
+        </motion.div>
+
+        {}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mb-12 sticky top-24 z-30"
+        >
+          <div className="p-4 bg-background/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-primary/5">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+              <div className="md:col-span-5 relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                </div>
+                <input
+                  type="text"
+                  name="search"
+                  placeholder="Search projects..."
+                  value={filters.search}
+                  onChange={handleFilterChange}
+                  className="block w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/50 text-foreground"
+                />
+              </div>
+
+              <div className="md:col-span-3 relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Filter className="h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                </div>
+                <select
+                  name="category"
+                  value={filters.category}
+                  onChange={handleFilterChange}
+                  className="block w-full pl-10 pr-10 py-3 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all appearance-none cursor-pointer text-foreground"
+                >
+                  <option value="all" className="bg-background">All Categories</option>
+                  <option value="web-development" className="bg-background">Web Development</option>
+                  <option value="mobile-app" className="bg-background">Mobile App</option>
+                  <option value="ai-ml" className="bg-background">AI/ML</option>
+                  <option value="research" className="bg-background">Research</option>
+                </select>
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <div className="h-4 w-4 border-l-2 border-b-2 border-muted-foreground transform -rotate-45 translate-y-[-2px]" />
+                </div>
+              </div>
+
+              <div className="md:col-span-4 relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Code className="h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                </div>
+                <input
+                  type="text"
+                  name="skills"
+                  placeholder="Filter by skills..."
+                  value={filters.skills}
+                  onChange={handleFilterChange}
+                  className="block w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/50 text-foreground"
+                />
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
+        {}
         {loading ? (
           <LoadingState message="Fetching latest projects..." />
         ) : error ? (
           <ErrorState message={error} />
         ) : projects.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
             {projects.map(project => (
               <ProjectCard key={project._id} project={project} />
             ))}
-          </div>
+          </motion.div>
         ) : (
           <EmptyState
             title="No Projects Found"
@@ -143,57 +198,85 @@ const BrowseProjects = () => {
   );
 };
 
-const ProjectCard = ({ project }) => (
-  <Link to={`/projects/${project._id}`} className="block group">
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-2xl transition-shadow duration-300 overflow-hidden h-full flex flex-col">
-      <div className="p-6 flex-grow">
-        <div className="flex justify-between items-start mb-3">
-          <h3 className="text-xl font-bold group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
-            {project.title}
-          </h3>
-          <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
-            project.status === 'open' 
-              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' 
-              : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
-          }`}>
-            {project.status}
-          </span>
-        </div>
-        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
-          {project.description}
-        </p>
-      </div>
-      <div className="px-6 pt-2 pb-6 border-t border-gray-100 dark:border-gray-700">
-        {project.requiredSkills?.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4">
-            <span className="text-sm font-semibold">Skills:</span>
-            {project.requiredSkills.slice(0, 3).map((skill, i) => (
-              <span key={i} className="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md text-xs font-medium">
-                {skill}
+const ProjectCard = ({ project }) => {
+  const getCategoryIcon = (category) => {
+    switch (category) {
+      case 'web-development': return <Globe className="w-4 h-4" />;
+      case 'mobile-app': return <Smartphone className="w-4 h-4" />;
+      case 'ai-ml': return <Cpu className="w-4 h-4" />;
+      case 'research': return <Beaker className="w-4 h-4" />;
+      default: return <Code className="w-4 h-4" />;
+    }
+  };
+
+  return (
+    <motion.div variants={itemVariants} className="h-full">
+      <Link to={`/projects/${project._id}`} className="block h-full group relative">
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-violet-600 rounded-2xl opacity-0 group-hover:opacity-30 blur transition duration-500"></div>
+        <div className="h-full bg-card/40 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden relative flex flex-col hover:transform hover:scale-[1.02] transition-all duration-300">
+          <div className="p-6 flex-grow">
+            <div className="flex justify-between items-start mb-4">
+              <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 backdrop-blur-sm">
+                {getCategoryIcon(project.category)}
+                <span className="ml-1.5 capitalize">{project.category?.replace('-', ' ') || 'Project'}</span>
+              </div>
+              <span className={cn(
+                "px-2.5 py-0.5 rounded-full text-xs font-medium border backdrop-blur-sm",
+                project.status === 'active'
+                  ? "bg-green-500/10 text-green-500 border-green-500/20"
+                  : "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"
+              )}>
+                {project.status}
               </span>
-            ))}
-            {project.requiredSkills.length > 3 && (
-              <span className="px-2.5 py-1 bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-400 rounded-md text-xs font-medium">
-                +{project.requiredSkills.length - 3}
-              </span>
+            </div>
+
+            <h3 className="text-xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors line-clamp-1">
+              {project.title}
+            </h3>
+
+            <p className="text-muted-foreground text-sm mb-6 line-clamp-3 leading-relaxed">
+              {project.description}
+            </p>
+
+            {project.requiredSkills?.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {project.requiredSkills.slice(0, 3).map((skill, i) => (
+                  <span key={i} className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-xs font-medium text-muted-foreground group-hover:border-primary/20 transition-colors">
+                    {skill}
+                  </span>
+                ))}
+                {project.requiredSkills.length > 3 && (
+                  <span className="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-xs font-medium text-muted-foreground">
+                    +{project.requiredSkills.length - 3}
+                  </span>
+                )}
+              </div>
             )}
           </div>
-        )}
-        <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
-          <p>
-            <span className="font-semibold">Owner:</span> {project.owner?.name || 'N/A'}
-          </p>
-          <div className="text-right">
-            <p className="font-semibold">
-              {project.members?.length || 0}
-              <span className="font-normal"> members</span>
-            </p>
+
+          <div className="px-6 py-4 bg-black/20 border-t border-white/5 flex justify-between items-center backdrop-blur-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary/20 to-violet-500/20 flex items-center justify-center text-[10px] font-bold text-primary border border-primary/10">
+                {project.owner?.name?.charAt(0) || '?'}
+              </div>
+              <span className="text-xs text-muted-foreground font-medium">{project.owner?.name || 'Anonymous'}</span>
+            </div>
+
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1">
+                <Users className="w-3 h-3" />
+                {project.members?.length || 0}
+              </span>
+              <span className="flex items-center gap-1 text-primary opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-10px] group-hover:translate-x-0 duration-300">
+                View Details
+                <ArrowRight className="w-3 h-3" />
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </Link>
-);
+      </Link>
+    </motion.div>
+  );
+};
 
 export default BrowseProjects;
-

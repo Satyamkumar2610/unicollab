@@ -17,23 +17,36 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    if (token) {
-      setIsAuthenticated(true);
-    }
-    setLoading(false);
+    const checkAuth = async () => {
+      const token = sessionStorage.getItem('token');
+      if (token) {
+        try {
+          const userData = await api.get('/auth/me');
+          setUser(userData);
+          setIsAuthenticated(true);
+        } catch (error) {
+          console.error('Auth check failed:', error);
+          sessionStorage.removeItem('token');
+          setIsAuthenticated(false);
+          setUser(null);
+        }
+      }
+      setLoading(false);
+    };
+
+    checkAuth();
   }, []);
 
   const login = async (email, password) => {
     console.log('🔵 Login attempt:', email);
     const response = await api.post('/auth/login', { email, password });
     const { token, user } = response;
-    
+
     console.log('✅ Login successful:', user);
     sessionStorage.setItem('token', token);
     setUser(user);
     setIsAuthenticated(true);
-    
+
     return response;
   };
 
@@ -41,12 +54,12 @@ export const AuthProvider = ({ children }) => {
     console.log('🔵 Register attempt:', userData.email);
     const response = await api.post('/auth/register', userData);
     const { token, user } = response;
-    
+
     console.log('✅ Registration successful:', user);
     sessionStorage.setItem('token', token);
     setUser(user);
     setIsAuthenticated(true);
-    
+
     return response;
   };
 

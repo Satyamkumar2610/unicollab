@@ -19,6 +19,7 @@ import { Explore } from './pages/Explore';
 import { Teams } from './pages/Teams';
 import Showcase from './pages/Showcase';
 import Resources from './pages/Resources';
+import IntroToUniCollab from './pages/IntroToUniCollab';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
@@ -53,6 +54,7 @@ function AppRoutes() {
       <Route path="/teams" element={<ProtectedRoute><Teams /></ProtectedRoute>} />
       <Route path="/showcase" element={<Showcase />} />
       <Route path="/resources" element={<Resources />} />
+      <Route path="/resources/intro" element={<IntroToUniCollab />} />
     </Routes>
   );
 }
@@ -62,7 +64,7 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+          <div className="flex flex-col min-h-screen bg-background text-foreground transition-colors duration-300">
             <Navbar />
             <main className="flex-1">
               <AppRoutes />

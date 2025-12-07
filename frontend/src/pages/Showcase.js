@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Filter, Star, GitFork, Eye } from 'lucide-react';
+import { Search, Star, GitFork, Eye } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '../components/ui/Card';
 
-// Mock data for showcase
+
 const projects = [
     {
         id: 1,
@@ -74,7 +74,7 @@ const Showcase = () => {
     return (
         <div className="min-h-screen bg-background pt-24 pb-12 px-4 sm:px-6 lg:px-8">
             <div className="container mx-auto">
-                {/* Header */}
+                {}
                 <div className="text-center mb-12">
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
@@ -93,7 +93,7 @@ const Showcase = () => {
                     </motion.p>
                 </div>
 
-                {/* Search and Filter */}
+                {}
                 <div className="flex flex-col md:flex-row gap-4 mb-8 justify-between items-center">
                     <div className="relative w-full md:w-96">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
@@ -118,7 +118,7 @@ const Showcase = () => {
                     </div>
                 </div>
 
-                {/* Grid */}
+                {}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {projects.map((project, index) => (
                         <motion.div

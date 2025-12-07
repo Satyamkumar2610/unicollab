@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+
 import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
 import { Button } from '../ui/Button';
-import { Menu, X, Sun, Moon, LayoutDashboard, Compass, FolderPlus, User, LogOut, Layers, BookOpen } from 'lucide-react';
+import { Menu, X, LayoutDashboard, Compass, FolderPlus, User, LogOut, Layers, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../../utils/cn';
+
+import logo from '../../assets/logo.jpg';
 
 const NavItem = ({ to, children, icon: Icon, onClick }) => (
   <NavLink
@@ -25,7 +27,6 @@ const NavItem = ({ to, children, icon: Icon, onClick }) => (
 
 const Navbar = () => {
   const { isAuthenticated, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -36,20 +37,22 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-xl border-b border-white/10 supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+          {}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-violet-600 flex items-center justify-center text-white font-bold text-xl shadow-lg group-hover:shadow-primary/50 transition-all">
-              U
-            </div>
+            <img
+              src={logo}
+              alt="UniCollab Logo"
+              className="w-10 h-10 rounded-lg shadow-lg group-hover:shadow-primary/50 transition-all object-cover"
+            />
             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-violet-600">
               UniCollab
             </span>
           </Link>
 
-          {/* Desktop Nav */}
+          {}
           <div className="hidden md:flex items-center gap-1">
             {isAuthenticated ? (
               <>
@@ -67,52 +70,44 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Right Side Actions */}
+          {}
           <div className="hidden md:flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              className="rounded-full"
-            >
-              {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-            </Button>
 
             {isAuthenticated ? (
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" asChild>
-                  <Link to="/profile">
-                    <User className="w-4 h-4 mr-2" />
-                    Profile
-                  </Link>
-                </Button>
-                <Button variant="destructive" size="sm" onClick={handleLogout}>
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Logout
-                </Button>
+              <div className="flex items-center gap-3">
+                <Link to="/profile">
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/30 transition-all duration-300 group cursor-pointer">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-violet-500/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                      <User className="w-4 h-4" />
+                    </div>
+                    <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">Profile</span>
+                  </div>
+                </Link>
+
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-destructive/10 hover:border-destructive/30 transition-all duration-300 group cursor-pointer"
+                >
+                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-muted-foreground group-hover:text-destructive group-hover:bg-destructive/20 transition-all">
+                    <LogOut className="w-4 h-4" />
+                  </div>
+                  <span className="text-sm font-medium text-muted-foreground group-hover:text-destructive transition-colors">Logout</span>
+                </button>
               </div>
             ) : (
               <div className="flex items-center gap-2">
                 <Button variant="ghost" asChild>
                   <Link to="/login">Login</Link>
                 </Button>
-                <Button variant="default" asChild>
+                <Button variant="glow" asChild>
                   <Link to="/register">Get Started</Link>
                 </Button>
               </div>
             )}
           </div>
 
-          {/* Mobile Menu Toggle */}
+          {}
           <div className="md:hidden flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              className="rounded-full"
-            >
-              {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-            </Button>
             <Button
               variant="ghost"
               size="icon"
@@ -124,7 +119,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -157,7 +152,7 @@ const Navbar = () => {
                     <Button variant="ghost" className="w-full" asChild onClick={() => setIsMenuOpen(false)}>
                       <Link to="/login">Login</Link>
                     </Button>
-                    <Button className="w-full" asChild onClick={() => setIsMenuOpen(false)}>
+                    <Button className="w-full" variant="glow" asChild onClick={() => setIsMenuOpen(false)}>
                       <Link to="/register">Get Started</Link>
                     </Button>
                   </div>

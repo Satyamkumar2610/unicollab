@@ -55,9 +55,16 @@ router.post('/', auth, async (req, res) => {
 
 router.get('/', auth, async (req, res) => {
   try {
-    const { page = 1, limit = 10, status } = req.query;
-    const userProjects = await Project.find({ owner: req.user.userId }).select('_id');
-    let query = { project: { $in: userProjects.map(p => p._id) } };
+    const { page = 1, limit = 10, status, type } = req.query;
+
+    let query = {};
+
+    if (type === 'sent') {
+      query.requester = req.user.userId;
+    } else {
+      const userProjects = await Project.find({ owner: req.user.userId }).select('_id');
+      query.project = { $in: userProjects.map(p => p._id) };
+    }
 
     if (status) {
       query.status = status;
@@ -130,6 +137,26 @@ router.put('/:id/reject', auth, async (req, res) => {
     await request.populate('requester', 'name avatar');
     await request.populate('project', 'title');
     res.json(request);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    const request = await CollaborationRequest.findById(req.params.id);
+    if (!request) return res.status(404).json({ message: 'Request not found' });
+
+    if (request.requester.toString() !== req.user.userId) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    if (request.status !== 'pending') {
+      return res.status(400).json({ message: 'Cannot withdraw processed request' });
+    }
+
+    await CollaborationRequest.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Request withdrawn' });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }

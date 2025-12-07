@@ -1,27 +1,29 @@
+import { Button } from './Button';
+
 export const Pagination = ({ metadata, onPageChange }) => {
   if (!metadata) return null;
 
   const { currentPage, totalPages } = metadata;
 
   return (
-    <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-700">
-      <button
+    <div className="flex justify-between items-center mt-8 pt-6 border-t border-white/10">
+      <Button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={!metadata.hasPrevPage}
-        className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition"
+        variant="secondary"
       >
         Previous
-      </button>
-      <span className="text-gray-400">
+      </Button>
+      <span className="text-muted-foreground">
         Page {currentPage} of {totalPages}
       </span>
-      <button
+      <Button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={!metadata.hasNextPage}
-        className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition"
+        variant="secondary"
       >
         Next
-      </button>
+      </Button>
     </div>
   );
 };

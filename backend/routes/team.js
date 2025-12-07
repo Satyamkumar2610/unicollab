@@ -31,6 +31,14 @@ router.get('/', async (req, res) => {
       ];
     }
 
+    if (req.query.university) {
+      query.university = req.query.university;
+    }
+
+    if (req.query.major) {
+      query.major = req.query.major;
+    }
+
     const sort = { [sortBy]: order === 'desc' ? -1 : 1 };
     const teams = await Team.find(query)
       .populate('leader members', 'name avatar email')

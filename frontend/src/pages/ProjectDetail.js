@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { api } from '../services/api';
 
 const ProjectDetail = () => {
@@ -9,22 +10,52 @@ const ProjectDetail = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchProject = async () => {
+      try {
+        const response = await api.get(`/projects/${id}`);
+        setProject(response);
+      } catch (error) {
+        console.error('Error fetching project:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchProject();
   }, [id]);
 
-  const fetchProject = async () => {
+  const { user } = useAuth();
+
+  const handleJoin = async () => {
     try {
+      await api.post(`/projects/${id}/join`);
       const response = await api.get(`/projects/${id}`);
-      setProject(response.data);
+      setProject(response);
+      alert('Successfully joined the project!');
     } catch (error) {
-      console.error('Error fetching project:', error);
-    } finally {
-      setLoading(false);
+      console.error('Error joining project:', error);
+      alert(error.response?.data?.message || 'Failed to join project');
+    }
+  };
+
+  const handleLeave = async () => {
+    if (!window.confirm('Are you sure you want to leave this project?')) return;
+    try {
+      await api.post(`/projects/${id}/leave`);
+      const response = await api.get(`/projects/${id}`);
+      setProject(response);
+      alert('Successfully left the project.');
+    } catch (error) {
+      console.error('Error leaving project:', error);
+      alert('Failed to leave project');
     }
   };
 
   if (loading) return <div className="pt-20 text-center text-white text-xl">Loading...</div>;
   if (!project) return <div className="pt-20 text-center text-white text-xl">Project not found</div>;
+
+  const isOwner = user && project.owner && (project.owner._id === user._id || project.owner === user._id);
+  const isMember = user && project.members && project.members.some(m => (m._id === user._id || m === user._id));
 
   return (
     <div className="pt-20 min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-6">
@@ -92,9 +123,27 @@ const ProjectDetail = () => {
             )}
           </div>
 
-          <button className="btn-primary w-full mt-8">
-            Join Project
-          </button>
+          <div className="mt-8">
+            {isOwner ? (
+              <button className="btn-primary w-full bg-gray-500 cursor-not-allowed" disabled>
+                You own this project
+              </button>
+            ) : isMember ? (
+              <button
+                onClick={handleLeave}
+                className="btn-primary w-full bg-red-600 hover:bg-red-700"
+              >
+                Leave Project
+              </button>
+            ) : (
+              <button
+                onClick={handleJoin}
+                className="btn-primary w-full"
+              >
+                Join Project
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

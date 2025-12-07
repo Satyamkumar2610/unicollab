@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
+import logo from '../assets/logo.jpg';
+
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
@@ -29,40 +31,47 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 pt-20">
-      <div className="card p-8 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
-        <p className="text-gray-400 mb-8">Log in to your UniCollab account</p>
+    <div className="min-h-screen flex items-center justify-center px-4 pt-20 relative overflow-hidden">
+      {}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl -z-10 animate-pulse-slow" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl -z-10 animate-pulse-slow delay-1000" />
+
+      <div className="glass-panel p-8 w-full max-w-md rounded-2xl border border-white/10">
+        <div className="flex justify-center mb-6">
+          <img src={logo} alt="UniCollab Logo" className="w-16 h-16 rounded-xl shadow-lg shadow-primary/20" />
+        </div>
+        <h2 className="text-3xl font-bold text-foreground mb-2 text-center font-heading">Welcome Back</h2>
+        <p className="text-muted-foreground mb-8 text-center">Log in to your UniCollab account</p>
 
         {error && (
-          <div className="bg-red-900/20 border border-red-800 text-red-400 p-4 mb-6 rounded-lg text-sm">
+          <div className="bg-destructive/10 border border-destructive/20 text-destructive p-4 mb-6 rounded-lg text-sm">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-white font-medium mb-2">Email</label>
+            <label className="block text-foreground font-medium mb-2">Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500 transition"
+              className="w-full px-4 py-3 bg-secondary/50 border border-input rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-muted-foreground"
               placeholder="Enter your email"
             />
           </div>
 
           <div>
-            <label className="block text-white font-medium mb-2">Password</label>
+            <label className="block text-foreground font-medium mb-2">Password</label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500 transition"
+              className="w-full px-4 py-3 bg-secondary/50 border border-input rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-muted-foreground"
               placeholder="Enter your password"
             />
           </div>
@@ -70,15 +79,15 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 px-4 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-lg shadow-lg shadow-primary/25 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
             {loading ? 'Logging in...' : 'Log In'}
           </button>
         </form>
 
-        <p className="text-center text-gray-400 mt-6">
+        <p className="text-center text-muted-foreground mt-6">
           Don't have an account?{' '}
-          <Link to="/register" className="text-blue-400 font-semibold hover:text-blue-300 transition">
+          <Link to="/register" className="text-primary font-semibold hover:text-primary/80 transition-colors">
             Sign up
           </Link>
         </p>

@@ -61,7 +61,15 @@ const Resources = () => {
                             </h2>
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {section.items.map((item, itemIdx) => (
-                                    <Card key={itemIdx} className="hover:border-primary/50 transition-colors cursor-pointer group">
+                                    <Card
+                                        key={itemIdx}
+                                        className="hover:border-primary/50 transition-colors cursor-pointer group"
+                                        onClick={() => {
+                                            if (item.title === "Introduction to UniCollab") {
+                                                window.location.href = "/resources/intro";
+                                            }
+                                        }}
+                                    >
                                         <CardHeader>
                                             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 text-primary group-hover:scale-110 transition-transform">
                                                 <item.icon className="w-5 h-5" />
