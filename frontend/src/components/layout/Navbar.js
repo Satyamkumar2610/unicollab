@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../ui/Button';
-import { Menu, X, LayoutDashboard, Compass, FolderPlus, User, LogOut, Layers, BookOpen } from 'lucide-react';
+import { Menu, X, LayoutDashboard, Compass, FolderPlus, User, LogOut, Users, Handshake } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../../utils/cn';
 
@@ -58,16 +58,11 @@ const Navbar = () => {
               <>
                 <NavItem to="/dashboard" icon={LayoutDashboard}>Dashboard</NavItem>
                 <NavItem to="/browse" icon={Compass}>Browse</NavItem>
+                <NavItem to="/teams" icon={Users}>Teams</NavItem>
+                <NavItem to="/collaborations" icon={Handshake}>Collaborations</NavItem>
                 <NavItem to="/create-project" icon={FolderPlus}>Create</NavItem>
-                <NavItem to="/showcase" icon={Layers}>Showcase</NavItem>
-                <NavItem to="/resources" icon={BookOpen}>Resources</NavItem>
               </>
-            ) : (
-              <>
-                <NavItem to="/showcase" icon={Layers}>Showcase</NavItem>
-                <NavItem to="/resources" icon={BookOpen}>Resources</NavItem>
-              </>
-            )}
+            ) : null}
           </div>
 
           { }
@@ -133,9 +128,10 @@ const Navbar = () => {
                 <>
                   <NavItem to="/dashboard" icon={LayoutDashboard} onClick={() => setIsMenuOpen(false)}>Dashboard</NavItem>
                   <NavItem to="/browse" icon={Compass} onClick={() => setIsMenuOpen(false)}>Browse Projects</NavItem>
+                  <NavItem to="/teams" icon={Users} onClick={() => setIsMenuOpen(false)}>Teams</NavItem>
+                  <NavItem to="/collaborations" icon={Handshake} onClick={() => setIsMenuOpen(false)}>Collaborations</NavItem>
                   <NavItem to="/create-project" icon={FolderPlus} onClick={() => setIsMenuOpen(false)}>Create Project</NavItem>
-                  <NavItem to="/showcase" icon={Layers} onClick={() => setIsMenuOpen(false)}>Showcase</NavItem>
-                  <NavItem to="/resources" icon={BookOpen} onClick={() => setIsMenuOpen(false)}>Resources</NavItem>
+
                   <NavItem to="/profile" icon={User} onClick={() => setIsMenuOpen(false)}>Profile</NavItem>
                   <div className="pt-3 mt-2 border-t border-white/10">
                     <Button variant="destructive" className="w-full justify-start" onClick={handleLogout}>
@@ -145,18 +141,16 @@ const Navbar = () => {
                   </div>
                 </>
               ) : (
-                <>
-                  <NavItem to="/showcase" icon={Layers} onClick={() => setIsMenuOpen(false)}>Showcase</NavItem>
-                  <NavItem to="/resources" icon={BookOpen} onClick={() => setIsMenuOpen(false)}>Resources</NavItem>
-                  <div className="pt-3 mt-2 border-t border-white/10 grid gap-3">
-                    <Button variant="ghost" className="w-full justify-center" asChild onClick={() => setIsMenuOpen(false)}>
-                      <Link to="/login">Login</Link>
-                    </Button>
-                    <Button className="w-full justify-center" variant="glow" asChild onClick={() => setIsMenuOpen(false)}>
-                      <Link to="/register">Get Started</Link>
-                    </Button>
-                  </div>
-                </>
+
+                <div className="pt-3 mt-2 border-t border-white/10 grid gap-3">
+                  <Button variant="ghost" className="w-full justify-center" asChild onClick={() => setIsMenuOpen(false)}>
+                    <Link to="/login">Login</Link>
+                  </Button>
+                  <Button className="w-full justify-center" variant="glow" asChild onClick={() => setIsMenuOpen(false)}>
+                    <Link to="/register">Get Started</Link>
+                  </Button>
+                </div>
+
               )}
             </div>
           </motion.div>

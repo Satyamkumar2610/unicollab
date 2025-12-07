@@ -84,12 +84,10 @@ const seedDB = async () => {
         await mongoose.connect(process.env.MONGODB_URI);
         console.log('Connected to MongoDB');
 
-        // Clear existing data
         await User.deleteMany({});
         await Project.deleteMany({});
         console.log('Cleared existing data');
 
-        // Create Users
         const createdUsers = [];
         for (const user of dummyUsers) {
             const hashedPassword = await bcrypt.hash(user.password, 10);
@@ -98,7 +96,6 @@ const seedDB = async () => {
         }
         console.log(`Created ${createdUsers.length} users`);
 
-        // Create Projects
         for (let i = 0; i < dummyProjects.length; i++) {
             const project = dummyProjects[i];
             const owner = createdUsers[i % createdUsers.length]; // Rotate owners

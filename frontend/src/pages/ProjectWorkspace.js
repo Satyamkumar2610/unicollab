@@ -1,7 +1,9 @@
-import React from 'react';
+import { useParams } from 'react-router-dom';
 import { TeamChat, KanbanBoard } from '../components';
 
 const ProjectWorkspace = () => {
+  const { id } = useParams();
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white pt-24 pb-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -14,10 +16,10 @@ const ProjectWorkspace = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
-            <KanbanBoard />
+            <KanbanBoard projectId={id} />
           </div>
           <div>
-            <TeamChat />
+            <TeamChat teamId={id} />
           </div>
         </div>
       </div>

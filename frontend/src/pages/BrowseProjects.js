@@ -68,7 +68,6 @@ const BrowseProjects = () => {
 
       const response = await api.get(`/projects?${params.toString()}`);
 
-      // Handle both paginated and non-paginated responses for backward compatibility
       if (response.data && response.metadata) {
         setProjects(response.data);
         setMetadata(response.metadata);

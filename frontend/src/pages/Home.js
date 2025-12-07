@@ -68,31 +68,10 @@ const Home = () => {
               Join a vibrant community of university students. Create projects, find teammates, and build your portfolio with real-world experience.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Link
-                to="/register"
-                className={cn(
-                  buttonVariants({ size: "lg", variant: "glow" }),
-                  "text-lg px-8 h-14 rounded-full shadow-[0_0_30px_rgba(124,58,237,0.3)] hover:shadow-[0_0_50px_rgba(124,58,237,0.5)] transition-all duration-300"
-                )}
-              >
-                Get Started <ArrowRight className="ml-2 w-5 h-5" />
-              </Link>
-              <Link
-                to="/showcase"
-                className={cn(
-                  buttonVariants({ size: "lg", variant: "outline" }),
-                  "text-lg px-8 h-14 rounded-full border-white/10 bg-white/5 hover:bg-white/10 hover:text-white hover:border-white/20 backdrop-blur-sm transition-all duration-300"
-                )}
-              >
-                Explore Projects
-              </Link>
-            </div>
           </motion.div>
         </div>
       </section>
 
-      { }
       <section className="py-24 relative z-10">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -123,7 +102,7 @@ const Home = () => {
             />
           </div>
         </div>
-      </section>
+      </section >
 
       { }
       <section className="py-24 border-t border-white/5 relative z-10 bg-black/20 backdrop-blur-sm">
@@ -157,44 +136,11 @@ const Home = () => {
                   </motion.div>
                 ))}
               </div>
-              <Button className="mt-8 md:mt-10 h-12 px-8 rounded-full w-full sm:w-auto" variant="secondary" asChild>
-                <Link to="/resources">View Resources</Link>
-              </Button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-primary to-violet-600 rounded-3xl blur-3xl opacity-20 animate-pulse-slow" />
-              <div className="relative bg-card/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
-                <div className="flex items-center gap-5 mb-8">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-violet-500/20 flex items-center justify-center text-primary border border-primary/10 shadow-inner">
-                    <Zap className="w-7 h-7" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-xl">Active Community</h3>
-                    <p className="text-sm text-muted-foreground">Growing every day</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4 text-center">
-                  <div className="p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-primary/20 transition-colors">
-                    <div className="text-4xl font-bold text-primary mb-1">500+</div>
-                    <div className="text-sm text-muted-foreground font-medium">Projects</div>
-                  </div>
-                  <div className="p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-violet-500/20 transition-colors">
-                    <div className="text-4xl font-bold text-violet-500 mb-1">2k+</div>
-                    <div className="text-sm text-muted-foreground font-medium">Students</div>
-                  </div>
-                </div>
-              </div>
             </motion.div>
           </div>
         </div>
-      </section>
-    </div>
+      </section >
+    </div >
   );
 };
 

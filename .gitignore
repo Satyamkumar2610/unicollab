@@ -17,3 +17,7 @@ yarn-error.log*
 .cache/
 .next/
 out/
+Thumbs.db
+*.map
+coverage/
+.nyc_output/

@@ -61,8 +61,8 @@ const Dashboard = () => {
       const statsRes = await api.get('/users/stats');
       setStats(statsRes);
 
-
-      const projectsRes = await api.get(`/projects?member=${user._id}&limit=3`);
+      const projectsRes = await api.get(`/projects?member=${user.id}&limit=3`);
+      console.log('Dashboard Recent Projects Response:', projectsRes);
       setProjects(projectsRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -139,17 +139,19 @@ const Dashboard = () => {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <Card className="bg-card/40 backdrop-blur-xl border border-white/10 hover:border-orange-500/30 transition-all duration-300 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)] group">
-              <CardContent className="p-6 flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">Collaborations</p>
-                  <h3 className="text-3xl font-bold text-foreground group-hover:text-orange-500 transition-colors">{stats.collaborations}</h3>
-                </div>
-                <div className="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-500 group-hover:scale-110 transition-transform duration-300 border border-orange-500/20">
-                  <Users className="w-6 h-6" />
-                </div>
-              </CardContent>
-            </Card>
+            <Link to="/collaborations" className="block h-full">
+              <Card className="bg-card/40 backdrop-blur-xl border border-white/10 hover:border-orange-500/30 transition-all duration-300 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)] group cursor-pointer">
+                <CardContent className="p-6 flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">Collaborations</p>
+                    <h3 className="text-3xl font-bold text-foreground group-hover:text-orange-500 transition-colors">{stats.collaborations}</h3>
+                  </div>
+                  <div className="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-500 group-hover:scale-110 transition-transform duration-300 border border-orange-500/20">
+                    <Users className="w-6 h-6" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
           </motion.div>
         </motion.div>
 

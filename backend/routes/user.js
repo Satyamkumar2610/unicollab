@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const User = require('../models/user');
 const Project = require('../models/project');
 const auth = require('../middleware/auth');
@@ -12,11 +13,14 @@ router.get('/stats', auth, async (req, res) => {
     const totalProjects = await Project.countDocuments({ owner: userId });
     const activeProjects = await Project.countDocuments({ owner: userId, status: 'active' });
 
-    
     const collaborations = await Project.countDocuments({
       members: userId,
       owner: { $ne: userId }
     });
+
+    console.log('STATS API CHECK:');
+    console.log('User ID:', userId);
+    console.log('Collaborations Count:', collaborations);
 
     res.json({
       totalProjects,
@@ -25,6 +29,34 @@ router.get('/stats', auth, async (req, res) => {
     });
   } catch (error) {
     console.error('Get stats error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+router.get('/collaborations', auth, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    console.log('GET /users/collaborations hit');
+    console.log('User ID (string):', userId, 'Type:', typeof userId);
+
+    const query = {
+      members: userId,
+      owner: { $ne: userId }
+    };
+    console.log('Collaboration Query (using string):', JSON.stringify(query, null, 2));
+
+    const collaborations = await Project.find(query)
+      .populate('owner', 'name email avatar')
+      .populate('members', 'name email avatar')
+      .sort({ createdAt: -1 });
+
+    console.log('Collaborations found:', collaborations.length);
+    console.log('Collaborations IDs:', collaborations.map(c => c._id));
+    console.log('Full collaborations:', JSON.stringify(collaborations, null, 2));
+
+    res.json(collaborations);
+  } catch (error) {
+    console.error('Get collaborations error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
@@ -62,7 +94,7 @@ router.delete('/profile', auth, async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    
+
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
     console.error('Delete profile error:', error);

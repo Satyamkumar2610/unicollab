@@ -9,7 +9,7 @@ const Footer = () => {
     <footer className="bg-background border-t border-white/10 mt-20">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          {}
+          { }
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-2">
               <img
@@ -26,18 +26,16 @@ const Footer = () => {
             </p>
           </div>
 
-          {}
+          { }
           <div>
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link to="/" className="hover:text-primary transition-colors">Home</Link></li>
               <li><Link to="/browse" className="hover:text-primary transition-colors">Browse Projects</Link></li>
-              <li><Link to="/showcase" className="hover:text-primary transition-colors">Showcase</Link></li>
-              <li><Link to="/resources" className="hover:text-primary transition-colors">Resources</Link></li>
             </ul>
           </div>
 
-          {}
+          { }
           <div>
             <h4 className="font-semibold mb-4">Legal</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
@@ -47,7 +45,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {}
+          { }
           <div>
             <h4 className="font-semibold mb-4">Connect</h4>
             <div className="flex gap-4">
@@ -64,7 +62,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {}
+        { }
         <div className="border-t border-border pt-8 mt-8 text-center text-sm text-muted-foreground">
           <p className="flex items-center justify-center gap-1">
             © {new Date().getFullYear()} UniCollab. Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> by Students.

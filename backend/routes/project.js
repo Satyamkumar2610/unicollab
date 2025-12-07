@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const Project = require('../models/project');
 const auth = require('../middleware/auth');
 const { buildListResponse } = require('../utils/listResponse');
@@ -15,13 +16,20 @@ router.get('/', async (req, res) => {
       order = 'desc',
       category,
       skills,
-      member
+      member,
+      excludeOwner
     } = req.query;
 
     let query = {};
 
     if (member) {
       query.members = member;
+    }
+
+    console.log('Projects API Query:', JSON.stringify(query, null, 2));
+
+    if (excludeOwner) {
+      query.owner = { $ne: excludeOwner };
     }
 
     if (status && status !== 'all') {

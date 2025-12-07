@@ -59,7 +59,67 @@ router.get('/:id', async (req, res) => {
       .populate('leader members projects', 'name avatar email title');
 
     if (!team) return res.status(404).json({ message: 'Team not found' });
-    res.json(team);
+
+    let teamData = team.toObject();
+    if (req.headers.authorization) {
+      try {
+        const token = req.headers.authorization.replace('Bearer ', '');
+        const jwt = require('jsonwebtoken');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        teamData.isOwner = team.leader._id.toString() === decoded.userId;
+        teamData.isMember = team.members.some(m => m._id.toString() === decoded.userId);
+      } catch (err) {
+
+      }
+    }
+
+    res.json(teamData);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+router.post('/:id/join', auth, async (req, res) => {
+  try {
+    const team = await Team.findById(req.params.id);
+    if (!team) return res.status(404).json({ message: 'Team not found' });
+
+    if (team.members.some(m => m.toString() === req.user.userId)) {
+      return res.status(400).json({ message: 'Already a member of this team' });
+    }
+
+    team.members.push(req.user.userId);
+    await team.save();
+
+    const populated = await team.populate('leader members projects', 'name avatar email title');
+    const teamData = populated.toObject();
+    teamData.isOwner = team.leader.toString() === req.user.userId;
+    teamData.isMember = true;
+
+    res.json(teamData);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+router.post('/:id/leave', auth, async (req, res) => {
+  try {
+    const team = await Team.findById(req.params.id);
+    if (!team) return res.status(404).json({ message: 'Team not found' });
+
+    if (team.leader.toString() === req.user.userId) {
+      return res.status(403).json({ message: 'Team leader cannot leave the team. Please transfer leadership or delete the team.' });
+    }
+
+    if (!team.members.some(m => m.toString() === req.user.userId)) {
+      return res.status(400).json({ message: 'You are not a member of this team' });
+    }
+
+    team.members = team.members.filter(m => m.toString() !== req.user.userId);
+    await team.save();
+
+    res.json({ message: 'Successfully left the team' });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }

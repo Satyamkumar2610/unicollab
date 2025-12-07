@@ -22,8 +22,8 @@ export const useList = (fetchFn, dependencies = []) => {
     };
 
     fetch();
-    
-  }, [fetchFn, ...dependencies]);
+
+  }, [...dependencies]);
 
   const refetch = async () => {
     setLoading(true);

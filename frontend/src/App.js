@@ -17,8 +17,8 @@ import ProjectWorkspace from './pages/ProjectWorkspace';
 import { Notifications } from './pages/Notifications';
 import { Explore } from './pages/Explore';
 import { Teams } from './pages/Teams';
-import Showcase from './pages/Showcase';
-import Resources from './pages/Resources';
+
+import Collaborations from './pages/Collaborations';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
@@ -51,8 +51,8 @@ function AppRoutes() {
       <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
       <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
       <Route path="/teams" element={<ProtectedRoute><Teams /></ProtectedRoute>} />
-      <Route path="/showcase" element={<Showcase />} />
-      <Route path="/resources" element={<Resources />} />
+
+      <Route path="/collaborations" element={<ProtectedRoute><Collaborations /></ProtectedRoute>} />
     </Routes>
   );
 }
