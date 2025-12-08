@@ -32,7 +32,7 @@ const Collaborations = () => {
     }, [user, authLoading]);
 
     const fetchCollaborations = async () => {
-        if (!user || !user._id) {
+        if (!user || !user.id) {
             console.log('User not found in context, skipping fetch');
             setLoading(false);
             return;
