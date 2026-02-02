@@ -22,7 +22,8 @@ import {
   Globe,
   Smartphone,
   Cpu,
-  Beaker
+  Beaker,
+  Briefcase
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
@@ -188,7 +189,18 @@ const ProjectDetail = () => {
                   )}
                 </div>
 
-                <div className="md:min-w-[200px]">
+                <div className="md:min-w-[200px] flex flex-col gap-3">
+                  {(isOwner || isMember) && (
+                    <Button
+                      onClick={() => navigate(`/project-workspace/${id}`)}
+                      className="w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/20"
+                      size="lg"
+                    >
+                      <Briefcase className="w-5 h-5" />
+                      Go to Workspace
+                    </Button>
+                  )}
+
                   {isOwner ? (
                     <div className="p-4 bg-secondary/30 border border-white/10 rounded-xl text-center">
                       <Crown className="w-8 h-8 text-yellow-500 mx-auto mb-2" />

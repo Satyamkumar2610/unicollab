@@ -1,9 +1,30 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const http = require('http');
+const { Server } = require('socket.io');
+const { setupSocketHandlers } = require('./utils/socketHandlers');
+const { apiLimiter } = require('./middleware/rateLimiter');
 require('dotenv').config();
 
 const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: [
+      'https://unicollab-psi.vercel.app',
+      'http://localhost:3000',
+      'http://localhost:3001'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
+  }
+});
+
+app.set('io', io);
+
+setupSocketHandlers(io);
 
 const corsOptions = {
   origin: [
@@ -19,6 +40,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(apiLimiter); // Apply rate limiting to all routes
 
 console.log(' Connecting to MongoDB...');
 console.log('URI:', process.env.MONGODB_URI);
@@ -42,6 +64,8 @@ app.use('/api/users', require('./routes/user'));
 app.use('/api/notifications', require('./routes/notification'));
 app.use('/api/collaboration-requests', require('./routes/collaborationRequest'));
 app.use('/api/teams', require('./routes/team'));
+app.use('/api/workspaces', require('./routes/workspace'));
+app.use('/api/recommendations', require('./routes/recommendations'));
 
 app.get('/', (req, res) => res.json({ message: 'UniCollab API Running' }));
 
@@ -50,7 +74,8 @@ app.use((req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(` Server running on port ${PORT}`);
   console.log(`API: http://localhost:${PORT}/api`);
+  console.log(` WebSocket server ready`);
 });

@@ -9,7 +9,8 @@ const projectSchema = new mongoose.Schema({
   maxMembers: Number,
   deadline: Date,
   category: String,
-  status: { type: String, enum: ['planning', 'active', 'completed'], default: 'planning' }
+  status: { type: String, enum: ['planning', 'active', 'completed'], default: 'planning' },
+  workspace: { type: mongoose.Schema.Types.ObjectId, ref: 'Workspace' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Project', projectSchema);

@@ -3,9 +3,12 @@ const mongoose = require('mongoose');
 const Project = require('../models/project');
 const auth = require('../middleware/auth');
 const { buildListResponse } = require('../utils/listResponse');
+const { createLimiter } = require('../middleware/rateLimiter');
+const { validate, schemas } = require('../middleware/validator');
+const { cache, cacheKeys } = require('../utils/cache');
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', cache.middleware(cacheKeys.projects, 300), async (req, res) => {
   try {
     const {
       status,
@@ -70,7 +73,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, createLimiter, validate(schemas.createProject), async (req, res) => {
   try {
     console.log('Creating project with data:', req.body);
     console.log('User ID from auth:', req.user.userId);
@@ -94,7 +97,7 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', cache.middleware(cacheKeys.project, 180), async (req, res) => {
   try {
     const project = await Project.findById(req.params.id)
       .populate('owner', 'name email avatar')
@@ -111,7 +114,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', auth, validate(schemas.updateProject), async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
 
@@ -128,6 +131,9 @@ router.put('/:id', auth, async (req, res) => {
       req.body,
       { new: true }
     ).populate('owner members', 'name email avatar');
+
+    // Invalidate cache
+    cache.delete(cacheKeys.project({ params: { id: req.params.id } }));
 
     res.json(updatedProject);
   } catch (error) {
